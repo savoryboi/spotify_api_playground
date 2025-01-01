@@ -12,10 +12,10 @@ function App() {
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 
   // easy access to dev redirect uri
-  // const REDIRECT_URI = 'http://localhost:3000';
+  const REDIRECT_URI = 'http://localhost:3000';
 
   // producion redirec uri
-  const REDIRECT_URI = 'https://albumify.netlify.app';
+  // const REDIRECT_URI = 'https://albumify.netlify.app';
 
   const [token, setToken] = useState("");
   const [displayTracks, setDisplayTracks] = useState(false);
@@ -82,6 +82,7 @@ function App() {
     const trackData = data.items;
     const trackData2 = data2.data.items;
     const allTopTracks = trackData.concat(trackData2);
+    // console.log(allTopTracks);
 
 
 
@@ -89,6 +90,8 @@ function App() {
     const albumData = data.items.map(track => {
       return track.album;
     });
+
+    // console.log(albumData)
     // repeating above step to gather larger dataset
     const albumData2 = data2.data.items.map(track => {
       return track.album;
@@ -97,8 +100,11 @@ function App() {
     // concatinate the two arrays of album data from separate api reqs
     const allUnfilteredAlbumData = albumData.concat(albumData2);
 
+    console.log(allUnfilteredAlbumData);
+
     // filter array of 100 tracks so only those that are ALBUMS (not singles or EPs) remain 
-    const allAlbumData = allUnfilteredAlbumData.filter(obj => { return obj.album_type === "ALBUM" });
+    const allAlbumData = allUnfilteredAlbumData.filter(obj => { return obj.album_type === "album" });
+
 
     // remove all album objects that only occur once ... AKA remove all albums that clearly only have one good song lmao
     function removeUnique(arr) {
@@ -121,7 +127,9 @@ function App() {
 
 
 
+    console.log(allAlbumData);
     const repeatAlbums = removeUnique(allAlbumData);
+    console.log(repeatAlbums);
 
     // isolate album names to more easily count frequency and sort into descending order
     const repeatAlbumNames = repeatAlbums.map(album => album.name)
@@ -150,6 +158,8 @@ function App() {
         }
       }
     })
+
+    console.log(`topAlbumData: ${topAlbumData}`);
 
     setTopAlbums(topAlbumData);
     setTopTracks(allTopTracks);
